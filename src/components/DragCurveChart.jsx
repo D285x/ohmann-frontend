@@ -1,6 +1,7 @@
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Label } from 'recharts';
 
 const axis = { stroke: '#86868b', fontSize: 11 };
+const tip = { contentStyle: { background: 'var(--surface-2)', border: '1px solid var(--line-strong)', borderRadius: 10, boxShadow: 'var(--shadow-lg)', color: 'var(--text)' }, labelStyle: { color: 'var(--text-2)', fontWeight: 600 } };
 
 /** Small Cd-vs-Mach chart for a vehicle's shockFLOW / analytic-fallback drag curve. */
 export default function DragCurveChart({ points }) {
@@ -18,7 +19,7 @@ export default function DragCurveChart({ points }) {
           <YAxis tick={axis} tickFormatter={(v) => v.toFixed(2)}>
             <Label value="Cd" angle={-90} position="insideLeft" fill="#86868b" fontSize={12} />
           </YAxis>
-          <Tooltip formatter={(v) => Number(v).toFixed(3)} labelFormatter={(v) => `Mach ${Number(v).toFixed(2)}`} />
+          <Tooltip {...tip} formatter={(v) => [Number(v).toFixed(3), 'Cd']} labelFormatter={(v) => `Mach ${Number(v).toFixed(2)}`} />
           <Line type="monotone" dataKey="cd" stroke="#ff375f" dot={false} strokeWidth={2} isAnimationActive={false} />
         </LineChart>
       </ResponsiveContainer>

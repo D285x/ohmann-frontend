@@ -4,7 +4,7 @@ import {
 
 const axis = { stroke: '#86868b', fontSize: 11 };
 const grid = <CartesianGrid stroke="rgba(134,134,139,0.18)" vertical={false} />;
-const tip = { contentStyle: { background: 'var(--surface)', border: 'none', borderRadius: 10, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', color: 'var(--text)' }, labelStyle: { color: 'var(--muted)' } };
+const tip = { contentStyle: { background: 'var(--surface-2)', border: '1px solid var(--line-strong)', borderRadius: 10, boxShadow: 'var(--shadow-lg)', color: 'var(--text)' }, labelStyle: { color: 'var(--text-2)', fontWeight: 600 } };
 
 function Chart({ title, data, x, y, xLabel, yLabel, color }) {
   return (
