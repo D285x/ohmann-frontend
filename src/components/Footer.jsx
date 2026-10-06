@@ -28,7 +28,6 @@ export default function Footer() {
           </div>
         </nav>
       </div>
-      <div className="footer-base">ESE3104 Full Stack Java-1 · Anurag University · React, Spring Boot and MySQL</div>
     </footer>
   );
 }
