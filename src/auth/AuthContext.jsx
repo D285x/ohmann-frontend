@@ -16,16 +16,23 @@ function loadStored() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(loadStored);
 
-  // The hosted demo uses an in-memory database that is reset whenever the server
-  // restarts, so a remembered login can point at an account that no longer exists.
-  // Check it once against the server and quietly log out if it is gone.
+  // A remembered login is only useful while its session token is still valid on the
+  // server (sessions, and the demo database, are reset whenever the server restarts).
+  // Check it once on load; logins saved before tokens existed have none and are dropped.
   useEffect(() => {
     if (!user) return;
-    UserApi.list()
-      .then((all) => {
-        if (!all.some((u) => u.id === user.id && u.email === user.email)) logout();
-      })
-      .catch(() => { /* server unreachable: keep the login, nothing to verify against */ });
+    if (!user.token) { logout(); return; }
+    UserApi.me().catch((err) => {
+      if (err.response?.status === 401 || err.response?.status === 404) logout();
+      /* server unreachable: keep the login, nothing to verify against */
+    });
+  }, []);
+
+  // Any request that comes back 401 means the session is gone
+  useEffect(() => {
+    const onExpired = () => logout();
+    window.addEventListener('ohmann:session-expired', onExpired);
+    return () => window.removeEventListener('ohmann:session-expired', onExpired);
   }, []);
 
   const login = (u) => {

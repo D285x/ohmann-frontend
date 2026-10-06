@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MissionApi, TransferApi, parseError } from '../api/client.js';
+import { useAuth } from '../auth/AuthContext.jsx';
 import Alert from '../components/Alert.jsx';
 import PageHeader from '../components/PageHeader.jsx';
 import { num, date, utcShort } from '../format.js';
@@ -10,6 +11,9 @@ export default function History() {
   const [transfers, setTransfers] = useState([]);
   const [filter, setFilter] = useState('ALL');
   const [error, setError] = useState('');
+  const { user } = useAuth();
+  // Plans can be deleted only by the operator who saved them (unowned plans by anyone logged in)
+  const canDelete = (p) => !!user && (p.plannedById == null || p.plannedById === user.id);
 
   const load = () =>
     Promise.all([MissionApi.list(), TransferApi.list()])
@@ -67,7 +71,7 @@ export default function History() {
                     <td className="small">{utcShort(m.createdAt)}</td>
                     <td className="row-actions">
                       <Link className="link" to={`/history/${m.id}`}>View</Link>
-                      <button className="link danger" onClick={() => removeMission(m)}>Delete</button>
+                      {canDelete(m) && <button className="link danger" onClick={() => removeMission(m)}>Delete</button>}
                     </td>
                   </tr>
                 ))}
@@ -97,7 +101,7 @@ export default function History() {
                     <td className="num">{num(t.totalDvMs)} m/s</td>
                     <td>{t.vehicleName ? `${t.vehicleName} (${num(t.payloadCapacityKg)} kg)` : '-'}</td>
                     <td>{t.plannedBy || '-'}</td>
-                    <td className="row-actions"><button className="link danger" onClick={() => removeTransfer(t)}>Delete</button></td>
+                    <td className="row-actions">{canDelete(t) && <button className="link danger" onClick={() => removeTransfer(t)}>Delete</button>}</td>
                   </tr>
                 ))}
               </tbody>

@@ -5,6 +5,27 @@ const api = axios.create({
   timeout: 120000,
 });
 
+// Send the session token (issued at login) so the server knows who is asking.
+// Deleting a plan or an account requires it.
+const SESSION_KEY = 'ohmann.operator';
+api.interceptors.request.use((config) => {
+  try {
+    const token = JSON.parse(localStorage.getItem(SESSION_KEY))?.token;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+  } catch { /* storage unavailable */ }
+  return config;
+});
+
+// A 401 outside login means the session expired (for example after a server restart):
+// tell the app so it can log out and ask the user to log in again.
+api.interceptors.response.use(undefined, (err) => {
+  const url = err.config?.url || '';
+  if (err.response?.status === 401 && !url.includes('/users/login')) {
+    window.dispatchEvent(new Event('ohmann:session-expired'));
+  }
+  return Promise.reject(err);
+});
+
 /** Turns an Axios error into { message, fieldErrors } for display. */
 export function parseError(err) {
   if (err.response?.data) {
@@ -65,5 +86,6 @@ export const UserApi = {
   register: (u) => api.post('/users/register', u).then((r) => r.data),
   login: (credentials) => api.post('/users/login', credentials).then((r) => r.data),
   list: () => api.get('/users').then((r) => r.data),
+  me: () => api.get('/users/me').then((r) => r.data),
   remove: (id) => api.delete(`/users/${id}`),
 };

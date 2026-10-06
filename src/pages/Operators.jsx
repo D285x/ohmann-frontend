@@ -16,14 +16,10 @@ export default function Operators() {
   useEffect(() => { load(); }, []);
 
   const remove = async (u) => {
-    const self = user?.id === u.id;
-    const msg = self
-      ? 'Delete your own account? You will be logged out. Your saved plans are kept.'
-      : `Remove ${u.fullName}? Their saved plans are kept without a name.`;
-    if (!window.confirm(msg)) return;
+    if (!window.confirm('Delete your own account? You will be logged out. Your saved plans are kept.')) return;
     try {
       await UserApi.remove(u.id);
-      if (self) logout();
+      logout();
       load();
     } catch (err) {
       setError(parseError(err).message);
@@ -32,7 +28,7 @@ export default function Operators() {
 
   return (
     <>
-      <PageHeader eyebrow="Team" title="Operators" subtitle="People who can save plans. Removing someone keeps their plans.">
+      <PageHeader eyebrow="Team" title="Operators" subtitle="People who can save plans. You can remove only your own account; your plans are kept.">
         <Link className="btn" to="/register">Add operator</Link>
       </PageHeader>
       <Alert onClose={() => setError('')}>{error}</Alert>
@@ -52,7 +48,7 @@ export default function Operators() {
                   <td>{ROLES.find(([v]) => v === u.role)?.[1] || u.role}</td>
                   <td>{u.organization || '-'}</td>
                   <td className="small">{utcShort(u.createdAt)}</td>
-                  <td className="row-actions"><button className="link danger" onClick={() => remove(u)}>Remove</button></td>
+                  <td className="row-actions">{user?.id === u.id && <button className="link danger" onClick={() => remove(u)}>Remove</button>}</td>
                 </tr>
               ))}
             </tbody>

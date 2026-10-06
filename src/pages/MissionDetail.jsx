@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { MissionApi, parseError } from '../api/client.js';
+import { useAuth } from '../auth/AuthContext.jsx';
 import Alert from '../components/Alert.jsx';
 import MissionResult from '../components/MissionResult.jsx';
 
@@ -8,6 +9,7 @@ export default function MissionDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [mission, setMission] = useState(null);
+  const { user } = useAuth();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -49,7 +51,9 @@ export default function MissionDetail() {
           actions={
             <>
               <button className="btn" onClick={download}>Export trajectory CSV</button>
-              <button className="btn btn-danger" onClick={remove}>Delete</button>
+              {user && (mission.plannedById == null || mission.plannedById === user.id) && (
+                <button className="btn btn-danger" onClick={remove}>Delete</button>
+              )}
             </>
           }
         />
