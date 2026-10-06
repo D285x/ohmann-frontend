@@ -1,0 +1,16 @@
+# Render Blueprint for the frontend Static Site (optional; the dashboard steps in README.md do the same).
+services:
+  - type: web
+    name: ohmann-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # Backend Web Service URL + /api
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      # Send every path to index.html so React Router routes survive a page refresh
+      - type: rewrite
+        source: /*
+        destination: /index.html

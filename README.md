@@ -12,14 +12,15 @@ cp .env.example .env      # points at http://localhost:8080/api
 npm run dev               # http://localhost:5173
 ```
 
-## Deploy on Vercel
+## Deploy on Render (Static Site)
 
-1. Vercel > Add New > Project > import this repository.
-2. Framework preset: **Vite** (build `npm run build`, output `dist`, both detected automatically).
-3. Environment Variables: `VITE_API_URL` = `https://<your-render-backend>.onrender.com/api`
-4. Deploy. `vercel.json` rewrites every path to `index.html` so React Router routes survive a page refresh.
-5. Add the Vercel URL to the backend's `CORS_ALLOWED_ORIGINS` on Render (the default already allows `https://*.vercel.app`).
+1. Render > New > **Static Site** > connect this repository.
+2. Build Command: `npm install && npm run build`
+3. Publish Directory: `dist`
+4. Environment: `VITE_API_URL` = `https://<your-backend>.onrender.com/api`
+5. After creation, open **Redirects/Rewrites** and add: Source `/*`, Destination `/index.html`, Action **Rewrite**. This keeps React Router routes working on page refresh.
+6. Make sure the backend's `CORS_ALLOWED_ORIGINS` includes this site's URL (the default `https://*.onrender.com` already does).
 
-`VITE_API_URL` is read at build time, so redeploy after changing it.
+`VITE_API_URL` is read at build time, so trigger a manual deploy after changing it. A `render.yaml` Blueprint with the same settings is included.
 
-Note: the Render free tier sleeps after about 15 minutes idle, so the first request after a pause can take 30 to 60 seconds.
+Note: the backend Web Service on the Render free tier sleeps after about 15 minutes idle, so the first request after a pause can take 30 to 60 seconds.
