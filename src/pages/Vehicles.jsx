@@ -43,7 +43,12 @@ export default function Vehicles() {
   const [aeroBusy, setAeroBusy] = useState(null);
 
   const load = () => VehicleApi.list().then(setList).catch((e) => setMessage({ type: 'error', text: parseError(e).message }));
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    // Reload when the hidden Sabre unlock adds a vehicle
+    window.addEventListener('ohmann:fleet-changed', load);
+    return () => window.removeEventListener('ohmann:fleet-changed', load);
+  }, []);
 
   const startCreate = () => { setForm(structuredClone(blank)); setEditingId(null); setErrors({}); };
   const startEdit = (v) => {

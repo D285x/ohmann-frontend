@@ -530,3 +530,44 @@ label.inline select { width: auto; height: 32px; font-size: 0.85rem; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ---- Easter egg: FSS-1000 Sabre (Konami code) ---- */
+.egg-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center; padding: 16px;
+  background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(6px);
+  animation: fade-in 0.25s var(--ease);
+}
+.egg-card {
+  position: relative; z-index: 1;
+  width: min(420px, 100%); padding: 1.6rem 1.6rem 1.3rem;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  animation: rise 0.4s var(--ease) 0.5s both;
+}
+.egg-card h2 { margin: 0 0 0.5rem; font-family: var(--font-display); font-size: 1.6rem; letter-spacing: -0.02em; }
+.egg-card p { margin: 0 0 1.1rem; line-height: 1.5; }
+.egg-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+.egg-streak {
+  position: absolute; left: 4vw; bottom: 6vh; width: 72px; height: 72px;
+  color: #7db8ff; filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 0 28px #7d5cff);
+  animation: egg-fly 1.8s cubic-bezier(0.45, 0, 0.6, 1) forwards;
+}
+.egg-streak svg { width: 100%; height: 100%; position: relative; z-index: 1; }
+/* exhaust trail behind the rocket, angled along the flight path */
+.egg-streak::before {
+  content: ''; position: absolute; left: 10px; top: 50px; width: 220px; height: 6px;
+  border-radius: 6px; transform-origin: 0 50%; transform: rotate(135deg);
+  background: linear-gradient(90deg, rgba(125, 92, 255, 0.95), rgba(10, 132, 255, 0.5) 40%, transparent);
+  filter: blur(1.5px);
+}
+@keyframes egg-fly {
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(100vw, -100vh) scale(1.2); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .egg-overlay, .egg-card { animation: none; }
+  .egg-streak { display: none; }
+}

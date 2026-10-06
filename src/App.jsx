@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
+import EasterEgg from './components/EasterEgg.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import LaunchPlanner from './pages/LaunchPlanner.jsx';
 import TransferPlanner from './pages/TransferPlanner.jsx';
@@ -34,6 +35,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <EasterEgg />
     </>
   );
 }
