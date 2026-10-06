@@ -56,6 +56,12 @@ export default function Login() {
       <div className="actions">
         <button className="btn btn-lg" disabled={busy}>{busy ? 'Checking…' : 'Log in'}</button>
       </div>
+      <p className="muted small demo-hint">
+        Just looking around? Use the demo account: <strong>demo@ohmann.app</strong> / <strong>ohmann-demo</strong>{' '}
+        <button type="button" className="link" onClick={() => { setForm({ email: 'demo@ohmann.app', password: 'ohmann-demo' }); setErrors({}); }}>
+          Fill in
+        </button>
+      </p>
       <p className="muted small" style={{ textAlign: 'center', marginTop: '1.25rem' }}>
         New to OhMann? <Link to="/register">Create an account</Link>
       </p>

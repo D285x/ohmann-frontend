@@ -571,3 +571,12 @@ label.inline select { width: auto; height: 32px; font-size: 0.85rem; }
   .egg-overlay, .egg-card { animation: none; }
   .egg-streak { display: none; }
 }
+
+.demo-hint { text-align: center; margin-top: 1.25rem; padding: 0.7rem 0.9rem; background: var(--surface-2); border-radius: var(--radius-sm); line-height: 1.5; }
+.not-found { text-align: center; padding: 4rem 0 3rem; }
+.not-found h1 { margin: 0.25rem 0 0.5rem; }
+.not-found p { margin: 0 auto 1.5rem; max-width: 420px; }
+
+/* Keep the footer at the bottom of the window on short pages */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+#root > main.container { flex: 1 0 auto; width: 100%; box-sizing: border-box; }

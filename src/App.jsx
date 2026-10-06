@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import EasterEgg from './components/EasterEgg.jsx';
@@ -31,11 +31,22 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/operators" element={<Operators />} />
-          <Route path="*" element={<p className="muted">Page not found.</p>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
       <EasterEgg />
     </>
+  );
+}
+
+function NotFound() {
+  return (
+    <section className="not-found">
+      <span className="eyebrow">404</span>
+      <h1>Off the trajectory</h1>
+      <p className="muted">This page does not exist. It may have been moved, or the link was mistyped.</p>
+      <Link className="btn" to="/">Back to the overview</Link>
+    </section>
   );
 }
